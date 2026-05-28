@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import styles from './CourseViewer.module.css'
 
 const STATUS_LABELS = {
@@ -12,6 +12,52 @@ function formatDate(iso) {
     dateStyle: 'medium',
     timeStyle: 'short',
   })
+}
+
+const MAX_RETRIES = 8
+const RETRY_DELAY = 4000
+
+function UrlScreenshot({ url }) {
+  const [cacheKey, setCacheKey] = useState(0)
+  const [status, setStatus] = useState('loading')
+  const attemptsRef = useRef(0)
+  const timerRef = useRef(null)
+
+  useEffect(() => {
+    return () => clearTimeout(timerRef.current)
+  }, [])
+
+  const screenshotUrl = `https://s0.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=800&_=${cacheKey}`
+
+  function handleLoad(e) {
+    // mShots placeholder is 400px wide; real screenshots match the requested width (800px)
+    const isPlaceholder = e.target.naturalWidth <= 400
+    if (isPlaceholder && attemptsRef.current < MAX_RETRIES) {
+      attemptsRef.current += 1
+      timerRef.current = setTimeout(() => {
+        setStatus('loading')
+        setCacheKey((k) => k + 1)
+      }, RETRY_DELAY)
+    } else {
+      setStatus('loaded')
+    }
+  }
+
+  return (
+    <div className={styles.screenshotWrapper}>
+      {status === 'loading' && <div className={styles.screenshotSkeleton} />}
+      {status === 'error' && (
+        <div className={styles.screenshotError}>Preview unavailable</div>
+      )}
+      <img
+        src={screenshotUrl}
+        alt="Course page preview"
+        className={`${styles.screenshotImg} ${status !== 'loaded' ? styles.screenshotHidden : ''}`}
+        onLoad={handleLoad}
+        onError={() => setStatus('error')}
+      />
+    </div>
+  )
 }
 
 function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUpdateUrl, onToggleComplete }) {
@@ -165,6 +211,15 @@ function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUp
             <span className={styles.completedAt}>Completed on {formatDate(course.completedAt)}</span>
           )}
         </div>
+
+        {course.url && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Course Preview</h2>
+            <a href={course.url} target="_blank" rel="noopener noreferrer" onClick={() => onVisit(course.id)}>
+              <UrlScreenshot key={course.url} url={course.url} />
+            </a>
+          </div>
+        )}
 
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>About this course</h2>
