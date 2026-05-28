@@ -3,6 +3,7 @@ const initialCourses = [
     id: '1a2b3c4d-0001-0000-0000-000000000001',
     title: 'The Complete React Developer Course',
     instructor: 'Andrew Mead',
+    organization: 'Udemy',
     description:
       'A comprehensive deep-dive into React, covering hooks, context, performance optimisation, and building production-ready applications from scratch.',
     topics: [
@@ -22,6 +23,7 @@ const initialCourses = [
     id: '1a2b3c4d-0002-0000-0000-000000000002',
     title: 'CSS for JavaScript Developers',
     instructor: 'Josh Comeau',
+    organization: 'css-for-js.dev',
     description:
       'An interactive course that reframes CSS fundamentals from a JavaScript developer perspective, covering layout, animations, and responsive design.',
     topics: [
@@ -41,6 +43,7 @@ const initialCourses = [
     id: '1a2b3c4d-0003-0000-0000-000000000003',
     title: 'Node.js: The Complete Guide',
     instructor: 'Maximilian Schwarzmüller',
+    organization: 'Udemy',
     description:
       'Master Node.js by building real-world applications. Covers REST APIs, authentication, databases, and deployment.',
     topics: [

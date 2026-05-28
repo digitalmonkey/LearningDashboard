@@ -17,6 +17,51 @@ function formatDate(iso) {
 const MAX_RETRIES = 8
 const RETRY_DELAY = 4000
 
+function EditableField({ label, value, placeholder, onSave }) {
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState('')
+
+  function start() {
+    setDraft(value ?? '')
+    setEditing(true)
+  }
+
+  function save() {
+    onSave(draft.trim())
+    setEditing(false)
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter') save()
+    if (e.key === 'Escape') setEditing(false)
+  }
+
+  if (editing) {
+    return (
+      <div className={styles.editableFieldRow}>
+        <input
+          type="text"
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={save}
+          className={styles.editableFieldInput}
+          autoFocus
+        />
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.editableFieldRow}>
+      <span className={styles.editableFieldValue}>
+        {value || <span className={styles.editableFieldEmpty}>{placeholder}</span>}
+      </span>
+      <button className={styles.editableFieldBtn} onClick={start}>Edit</button>
+    </div>
+  )
+}
+
 function UrlScreenshot({ url }) {
   const [cacheKey, setCacheKey] = useState(0)
   const [status, setStatus] = useState('loading')
@@ -60,7 +105,7 @@ function UrlScreenshot({ url }) {
   )
 }
 
-function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUpdateUrl, onToggleComplete, onDeleteCourse }) {
+function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUpdateUrl, onToggleComplete, onDeleteCourse, onUpdateField }) {
   const [editingUrl, setEditingUrl] = useState(false)
   const [urlDraft, setUrlDraft] = useState('')
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -113,43 +158,60 @@ function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUp
           </div>
         </div>
 
-        <div className={styles.instructorRow}>
-          <p className={styles.instructor}>
-            by {course.instructor}
-            {course.url && !editingUrl && (
-              <a
-                href={course.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.courseLink}
-                onClick={() => onVisit(course.id)}
-              >
-                Go to Course →
-              </a>
-            )}
-          </p>
-          {!editingUrl && (
-            <button className={styles.editUrlBtn} onClick={startEditUrl} title="Edit course URL">
-              {course.url ? 'Edit URL' : '+ Add URL'}
-            </button>
-          )}
+        <div className={styles.metaBlock}>
+          <div className={styles.metaRow}>
+            <span className={styles.metaLabel}>Instructor</span>
+            <EditableField
+              value={course.instructor}
+              placeholder="Add instructor"
+              onSave={(v) => onUpdateField(course.id, 'instructor', v)}
+            />
+          </div>
+          <div className={styles.metaRow}>
+            <span className={styles.metaLabel}>Organisation</span>
+            <EditableField
+              value={course.organization}
+              placeholder="Add organisation"
+              onSave={(v) => onUpdateField(course.id, 'organization', v)}
+            />
+          </div>
+          <div className={styles.metaRow}>
+            <span className={styles.metaLabel}>URL</span>
+            <div className={styles.urlMetaRow}>
+              {course.url && !editingUrl && (
+                <a
+                  href={course.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.courseLink}
+                  onClick={() => onVisit(course.id)}
+                >
+                  Go to Course →
+                </a>
+              )}
+              {editingUrl ? (
+                <div className={styles.urlEditRow}>
+                  <input
+                    type="url"
+                    value={urlDraft}
+                    onChange={(e) => setUrlDraft(e.target.value)}
+                    onKeyDown={handleUrlKeyDown}
+                    className={styles.urlInput}
+                    placeholder="https://..."
+                    autoFocus
+                  />
+                  <button className={styles.urlSaveBtn} onClick={saveUrl}>Save</button>
+                  <button className={styles.urlCancelBtn} onClick={() => setEditingUrl(false)}>Cancel</button>
+                </div>
+              ) : (
+                <button className={styles.editUrlBtn} onClick={startEditUrl}>
+                  {course.url ? 'Edit' : '+ Add URL'}
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
-        {editingUrl && (
-          <div className={styles.urlEditRow}>
-            <input
-              type="url"
-              value={urlDraft}
-              onChange={(e) => setUrlDraft(e.target.value)}
-              onKeyDown={handleUrlKeyDown}
-              className={styles.urlInput}
-              placeholder="https://..."
-              autoFocus
-            />
-            <button className={styles.urlSaveBtn} onClick={saveUrl}>Save</button>
-            <button className={styles.urlCancelBtn} onClick={() => setEditingUrl(false)}>Cancel</button>
-          </div>
-        )}
 
         {course.lastVisited && (
           <p className={styles.lastVisited}>

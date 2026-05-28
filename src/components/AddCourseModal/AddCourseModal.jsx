@@ -4,6 +4,7 @@ import styles from './AddCourseModal.module.css'
 const EMPTY_FORM = {
   title: '',
   instructor: '',
+  organization: '',
   url: '',
   description: '',
   topics: '',
@@ -39,6 +40,7 @@ function AddCourseModal({ onAddCourse, onClose }) {
       id: crypto.randomUUID(),
       title: form.title.trim(),
       instructor: form.instructor.trim(),
+      organization: form.organization.trim(),
       url: form.url.trim(),
       description: form.description.trim(),
       topics: form.topics
@@ -78,17 +80,31 @@ function AddCourseModal({ onAddCourse, onClose }) {
             />
           </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="instructor">Instructor</label>
-            <input
-              id="instructor"
-              name="instructor"
-              type="text"
-              value={form.instructor}
-              onChange={handleChange}
-              className={styles.input}
-              placeholder="e.g. Jane Smith"
-            />
+          <div className={styles.row}>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="instructor">Instructor</label>
+              <input
+                id="instructor"
+                name="instructor"
+                type="text"
+                value={form.instructor}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="e.g. Jane Smith"
+              />
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="organization">Organisation</label>
+              <input
+                id="organization"
+                name="organization"
+                type="text"
+                value={form.organization}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="e.g. Udemy"
+              />
+            </div>
           </div>
 
           <div className={styles.field}>

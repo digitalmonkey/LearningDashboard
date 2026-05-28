@@ -127,21 +127,83 @@
   color: #15803d;
 }
 
-.instructorRow {
+.metaBlock {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid #e2e5ec;
+  border-radius: 10px;
 }
 
-.instructor {
+.metaRow {
   display: flex;
   align-items: center;
-  gap: 16px;
-  color: #6b7280;
+  gap: 12px;
+  min-height: 32px;
+}
+
+.metaLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.urlMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.editableFieldRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.editableFieldValue {
   font-size: 0.95rem;
-  margin-bottom: 0;
+  color: #1a1a2e;
+}
+
+.editableFieldEmpty {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.editableFieldInput {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #e94560;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #1a1a2e;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+}
+
+.editableFieldBtn {
+  background: none;
+  border: 1px solid #e2e5ec;
+  color: #9ca3af;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.editableFieldBtn:hover {
+  border-color: #e94560;
+  color: #e94560;
 }
 
 .editUrlBtn {

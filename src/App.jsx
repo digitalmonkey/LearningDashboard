@@ -102,6 +102,12 @@ function App() {
     )
   }
 
+  function handleUpdateField(courseId, field, value) {
+    setCourses((prev) =>
+      prev.map((c) => c.id === courseId ? { ...c, [field]: value } : c)
+    )
+  }
+
   function handleUpdateUrl(courseId, url) {
     setCourses((prev) =>
       prev.map((c) => c.id === courseId ? { ...c, url } : c)
@@ -132,7 +138,7 @@ function App() {
         onSelectCourse={setSelectedCourseId}
         onOpenModal={() => setIsModalOpen(true)}
       />
-      <CourseViewer course={selectedCourse} onVisit={handleVisitCourse} onUpdateProgress={handleUpdateProgress} onUpdateLessons={handleUpdateLessons} onUpdateUrl={handleUpdateUrl} onToggleComplete={handleToggleComplete} onDeleteCourse={handleDeleteCourse} />
+      <CourseViewer course={selectedCourse} onVisit={handleVisitCourse} onUpdateProgress={handleUpdateProgress} onUpdateLessons={handleUpdateLessons} onUpdateUrl={handleUpdateUrl} onToggleComplete={handleToggleComplete} onDeleteCourse={handleDeleteCourse} onUpdateField={handleUpdateField} />
       {isModalOpen && (
         <AddCourseModal
           onAddCourse={handleAddCourse}
