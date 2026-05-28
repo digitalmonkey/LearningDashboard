@@ -1,0 +1,62 @@
+.item {
+  padding: 12px 20px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.active {
+  background: rgba(233, 69, 96, 0.15);
+  border-left-color: #e94560;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #e0e0e0;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.active .title {
+  color: #ffffff;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.notstarted {
+  background: rgba(160, 168, 192, 0.15);
+  color: #a0a8c0;
+}
+
+.inprogress {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+}
+
+.completed {
+  background: rgba(40, 199, 111, 0.15);
+  color: #28c76f;
+}
+
+.progress {
+  font-size: 0.75rem;
+  color: #a0a8c0;
+}
