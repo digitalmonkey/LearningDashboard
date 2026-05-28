@@ -7,7 +7,7 @@ import styles from './App.module.css'
 
 const STORAGE_KEY = 'learning-dashboard-courses'
 
-function loadCourses() {
+function loadFromLocalStorage() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) return JSON.parse(stored)
@@ -17,9 +17,32 @@ function loadCourses() {
   return initialCourses
 }
 
+async function loadFromFile() {
+  try {
+    const res = await fetch('/api/courses')
+    if (!res.ok) return null
+    const data = await res.json()
+    return data
+  } catch {
+    return null
+  }
+}
+
+async function saveToFile(courses) {
+  try {
+    await fetch('/api/courses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(courses, null, 2),
+    })
+  } catch {
+    // silently fail — localStorage still has the data
+  }
+}
+
 function App() {
-  const [courses, setCourses] = useState(loadCourses)
-  const [selectedCourseId, setSelectedCourseId] = useState(() => loadCourses()[0]?.id ?? null)
+  const [courses, setCourses] = useState(loadFromLocalStorage)
+  const [selectedCourseId, setSelectedCourseId] = useState(() => loadFromLocalStorage()[0]?.id ?? null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const selectedCourse = courses.find((c) => c.id === selectedCourseId) ?? null
@@ -31,8 +54,20 @@ function App() {
     return new Date(b.lastVisited) - new Date(a.lastVisited)
   })
 
+  // On startup, load from file and override local state if data exists
+  useEffect(() => {
+    loadFromFile().then((data) => {
+      if (data && data.length > 0) {
+        setCourses(data)
+        setSelectedCourseId((prev) => data.find((c) => c.id === prev)?.id ?? data[0]?.id ?? null)
+      }
+    })
+  }, [])
+
+  // On every change, persist to both localStorage and courses.json
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(courses))
+    saveToFile(courses)
   }, [courses])
 
   function handleAddCourse(newCourse) {
