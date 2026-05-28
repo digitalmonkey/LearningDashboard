@@ -212,15 +212,6 @@ function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUp
           )}
         </div>
 
-        {course.url && (
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Course Preview</h2>
-            <a href={course.url} target="_blank" rel="noopener noreferrer" onClick={() => onVisit(course.id)}>
-              <UrlScreenshot key={course.url} url={course.url} />
-            </a>
-          </div>
-        )}
-
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>About this course</h2>
           <p className={styles.description}>{course.description}</p>
@@ -234,6 +225,15 @@ function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUp
             ))}
           </ol>
         </div>
+
+        {course.url && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Course Preview</h2>
+            <a href={course.url} target="_blank" rel="noopener noreferrer" onClick={() => onVisit(course.id)}>
+              <UrlScreenshot key={course.url} url={course.url} />
+            </a>
+          </div>
+        )}
       </div>
     </main>
   )
