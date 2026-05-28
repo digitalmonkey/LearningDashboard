@@ -73,6 +73,14 @@ function App() {
     )
   }
 
+  function handleDeleteCourse(courseId) {
+    const remaining = courses.filter((c) => c.id !== courseId)
+    setCourses(remaining)
+    if (selectedCourseId === courseId) {
+      setSelectedCourseId(remaining[0]?.id ?? null)
+    }
+  }
+
   function handleUpdateLessons(courseId, currentLesson, totalLessons) {
     const progress = totalLessons > 0 ? Math.round((currentLesson / totalLessons) * 100) : 0
     const status = progress === 0 ? 'not-started' : progress === 100 ? 'completed' : 'in-progress'
@@ -89,7 +97,7 @@ function App() {
         onSelectCourse={setSelectedCourseId}
         onOpenModal={() => setIsModalOpen(true)}
       />
-      <CourseViewer course={selectedCourse} onVisit={handleVisitCourse} onUpdateProgress={handleUpdateProgress} onUpdateLessons={handleUpdateLessons} onUpdateUrl={handleUpdateUrl} onToggleComplete={handleToggleComplete} />
+      <CourseViewer course={selectedCourse} onVisit={handleVisitCourse} onUpdateProgress={handleUpdateProgress} onUpdateLessons={handleUpdateLessons} onUpdateUrl={handleUpdateUrl} onToggleComplete={handleToggleComplete} onDeleteCourse={handleDeleteCourse} />
       {isModalOpen && (
         <AddCourseModal
           onAddCourse={handleAddCourse}

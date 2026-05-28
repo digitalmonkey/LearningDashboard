@@ -60,9 +60,10 @@ function UrlScreenshot({ url }) {
   )
 }
 
-function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUpdateUrl, onToggleComplete }) {
+function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUpdateUrl, onToggleComplete, onDeleteCourse }) {
   const [editingUrl, setEditingUrl] = useState(false)
   const [urlDraft, setUrlDraft] = useState('')
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   function startEditUrl() {
     setUrlDraft(course.url ?? '')
@@ -94,9 +95,22 @@ function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUp
       <div className={styles.content}>
         <div className={styles.headerRow}>
           <h1 className={styles.title}>{course.title}</h1>
-          <span className={`${styles.badge} ${styles[course.status.replace('-', '')]}`}>
-            {STATUS_LABELS[course.status]}
-          </span>
+          <div className={styles.headerActions}>
+            <span className={`${styles.badge} ${styles[course.status.replace('-', '')]}`}>
+              {STATUS_LABELS[course.status]}
+            </span>
+            {!confirmDelete ? (
+              <button className={styles.deleteBtn} onClick={() => setConfirmDelete(true)}>
+                Delete
+              </button>
+            ) : (
+              <div className={styles.deleteConfirm}>
+                <span className={styles.deleteConfirmText}>Remove course?</span>
+                <button className={styles.deleteConfirmYes} onClick={() => onDeleteCourse(course.id)}>Yes</button>
+                <button className={styles.deleteConfirmNo} onClick={() => setConfirmDelete(false)}>No</button>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className={styles.instructorRow}>
