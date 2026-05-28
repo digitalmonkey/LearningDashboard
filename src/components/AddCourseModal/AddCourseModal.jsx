@@ -7,6 +7,8 @@ const EMPTY_FORM = {
   url: '',
   description: '',
   topics: '',
+  totalLessons: '',
+  currentLesson: '',
   progress: 0,
   status: 'not-started',
 }
@@ -29,6 +31,10 @@ function AddCourseModal({ onAddCourse, onClose }) {
 
   function handleSubmit(e) {
     e.preventDefault()
+    const totalLessons = Number(form.totalLessons) || 0
+    const currentLesson = Number(form.currentLesson) || 0
+    const progress = totalLessons > 0 ? Math.round((currentLesson / totalLessons) * 100) : Number(form.progress)
+    const status = progress === 0 ? 'not-started' : progress === 100 ? 'completed' : 'in-progress'
     const newCourse = {
       id: crypto.randomUUID(),
       title: form.title.trim(),
@@ -39,8 +45,10 @@ function AddCourseModal({ onAddCourse, onClose }) {
         .split(',')
         .map((t) => t.trim())
         .filter(Boolean),
-      progress: Number(form.progress),
-      status: form.status,
+      totalLessons,
+      currentLesson,
+      progress,
+      status,
     }
     onAddCourse(newCourse)
   }
@@ -126,20 +134,34 @@ function AddCourseModal({ onAddCourse, onClose }) {
 
           <div className={styles.row}>
             <div className={styles.field}>
-              <label className={styles.label} htmlFor="status">Status</label>
-              <select
-                id="status"
-                name="status"
-                value={form.status}
+              <label className={styles.label} htmlFor="currentLesson">Current Lesson</label>
+              <input
+                id="currentLesson"
+                name="currentLesson"
+                type="number"
+                min={0}
+                value={form.currentLesson}
                 onChange={handleChange}
-                className={styles.select}
-              >
-                <option value="not-started">Not Started</option>
-                <option value="in-progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </select>
+                className={styles.input}
+                placeholder="0"
+              />
             </div>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="totalLessons">Total Lessons</label>
+              <input
+                id="totalLessons"
+                name="totalLessons"
+                type="number"
+                min={0}
+                value={form.totalLessons}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="0"
+              />
+            </div>
+          </div>
 
+          {!form.totalLessons && (
             <div className={styles.field}>
               <label className={styles.label} htmlFor="progress">
                 Progress <span className={styles.hint}>({form.progress}%)</span>
@@ -155,7 +177,7 @@ function AddCourseModal({ onAddCourse, onClose }) {
                 className={styles.range}
               />
             </div>
-          </div>
+          )}
 
           <div className={styles.actions}>
             <button type="button" className={styles.cancelBtn} onClick={onClose}>

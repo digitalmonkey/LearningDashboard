@@ -60,13 +60,87 @@
   color: #15803d;
 }
 
+.instructorRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
 .instructor {
   display: flex;
   align-items: center;
   gap: 16px;
   color: #6b7280;
   font-size: 0.95rem;
-  margin-bottom: 32px;
+  margin-bottom: 0;
+}
+
+.editUrlBtn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid #e2e5ec;
+  color: #6b7280;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.editUrlBtn:hover {
+  border-color: #e94560;
+  color: #e94560;
+}
+
+.urlEditRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.urlInput {
+  flex: 1;
+  padding: 7px 12px;
+  border: 1px solid #e94560;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #1a1a2e;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+}
+
+.urlSaveBtn {
+  padding: 7px 16px;
+  background: #e94560;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.urlSaveBtn:hover {
+  background: #c73652;
+}
+
+.urlCancelBtn {
+  padding: 7px 12px;
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.urlCancelBtn:hover {
+  background: #e5e7eb;
 }
 
 .courseLink {
@@ -86,6 +160,44 @@
   background: #c73652;
 }
 
+.completeRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.completeLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+}
+
+.completeCheckbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #28c76f;
+  cursor: pointer;
+}
+
+.completedAt {
+  font-size: 0.8rem;
+  color: #28c76f;
+  font-weight: 500;
+}
+
+.lastVisited {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 6px;
+  margin-bottom: 32px;
+}
+
 .progressSection {
   margin-bottom: 40px;
 }
@@ -98,18 +210,67 @@
   margin-bottom: 8px;
 }
 
-.progressBar {
-  height: 8px;
-  background: #e2e5ec;
-  border-radius: 4px;
-  overflow: hidden;
+.lessonRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.progressFill {
-  height: 100%;
-  background: #e94560;
-  border-radius: 4px;
-  transition: width 0.4s ease;
+.lessonField {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.lessonLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lessonInput {
+  width: 90px;
+  padding: 7px 10px;
+  border: 1px solid #e2e5ec;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #1a1a2e;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.lessonInput:focus {
+  border-color: #e94560;
+  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+}
+
+.lessonSeparator {
+  font-size: 1.4rem;
+  color: #9ca3af;
+  padding-bottom: 6px;
+}
+
+.progressSlider {
+  width: 100%;
+  accent-color: #e94560;
+  cursor: pointer;
+  height: 6px;
+}
+
+.progressSliderDisabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.progressNote {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: #9ca3af;
+  font-style: italic;
 }
 
 .section {

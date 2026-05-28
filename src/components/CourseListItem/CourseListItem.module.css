@@ -60,3 +60,9 @@
   font-size: 0.75rem;
   color: #a0a8c0;
 }
+
+.lastVisited {
+  margin-top: 5px;
+  font-size: 0.7rem;
+  color: #6b7280;
+}
