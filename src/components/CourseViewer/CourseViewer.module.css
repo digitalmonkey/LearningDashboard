@@ -127,15 +127,30 @@
   color: #15803d;
 }
 
+.metaPreviewRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: stretch;
+}
+
 .metaBlock {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 24px;
   padding: 14px 16px;
   background: #ffffff;
   border: 1px solid #e2e5ec;
   border-radius: 10px;
+}
+
+.previewPanel {
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e2e5ec;
+  line-height: 0;
 }
 
 .metaRow {

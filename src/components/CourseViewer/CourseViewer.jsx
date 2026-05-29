@@ -158,58 +158,72 @@ function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUp
           </div>
         </div>
 
-        <div className={styles.metaBlock}>
-          <div className={styles.metaRow}>
-            <span className={styles.metaLabel}>Instructor</span>
-            <EditableField
-              value={course.instructor}
-              placeholder="Add instructor"
-              onSave={(v) => onUpdateField(course.id, 'instructor', v)}
-            />
-          </div>
-          <div className={styles.metaRow}>
-            <span className={styles.metaLabel}>Organisation</span>
-            <EditableField
-              value={course.organization}
-              placeholder="Add organisation"
-              onSave={(v) => onUpdateField(course.id, 'organization', v)}
-            />
-          </div>
-          <div className={styles.metaRow}>
-            <span className={styles.metaLabel}>URL</span>
-            <div className={styles.urlMetaRow}>
-              {course.url && !editingUrl && (
-                <a
-                  href={course.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.courseLink}
-                  onClick={() => onVisit(course.id)}
-                >
-                  Go to Course →
-                </a>
-              )}
-              {editingUrl ? (
-                <div className={styles.urlEditRow}>
-                  <input
-                    type="url"
-                    value={urlDraft}
-                    onChange={(e) => setUrlDraft(e.target.value)}
-                    onKeyDown={handleUrlKeyDown}
-                    className={styles.urlInput}
-                    placeholder="https://..."
-                    autoFocus
-                  />
-                  <button className={styles.urlSaveBtn} onClick={saveUrl}>Save</button>
-                  <button className={styles.urlCancelBtn} onClick={() => setEditingUrl(false)}>Cancel</button>
-                </div>
-              ) : (
-                <button className={styles.editUrlBtn} onClick={startEditUrl}>
-                  {course.url ? 'Edit' : '+ Add URL'}
-                </button>
-              )}
+        <div className={styles.metaPreviewRow}>
+          <div className={styles.metaBlock}>
+            <div className={styles.metaRow}>
+              <span className={styles.metaLabel}>Instructor</span>
+              <EditableField
+                value={course.instructor}
+                placeholder="Add instructor"
+                onSave={(v) => onUpdateField(course.id, 'instructor', v)}
+              />
+            </div>
+            <div className={styles.metaRow}>
+              <span className={styles.metaLabel}>Organisation</span>
+              <EditableField
+                value={course.organization}
+                placeholder="Add organisation"
+                onSave={(v) => onUpdateField(course.id, 'organization', v)}
+              />
+            </div>
+            <div className={styles.metaRow}>
+              <span className={styles.metaLabel}>URL</span>
+              <div className={styles.urlMetaRow}>
+                {course.url && !editingUrl && (
+                  <a
+                    href={course.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.courseLink}
+                    onClick={() => onVisit(course.id)}
+                  >
+                    Go to Course →
+                  </a>
+                )}
+                {editingUrl ? (
+                  <div className={styles.urlEditRow}>
+                    <input
+                      type="url"
+                      value={urlDraft}
+                      onChange={(e) => setUrlDraft(e.target.value)}
+                      onKeyDown={handleUrlKeyDown}
+                      className={styles.urlInput}
+                      placeholder="https://..."
+                      autoFocus
+                    />
+                    <button className={styles.urlSaveBtn} onClick={saveUrl}>Save</button>
+                    <button className={styles.urlCancelBtn} onClick={() => setEditingUrl(false)}>Cancel</button>
+                  </div>
+                ) : (
+                  <button className={styles.editUrlBtn} onClick={startEditUrl}>
+                    {course.url ? 'Edit' : '+ Add URL'}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
+
+          {course.url && (
+            <a
+              href={course.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.previewPanel}
+              onClick={() => onVisit(course.id)}
+            >
+              <UrlScreenshot key={course.url} url={course.url} />
+            </a>
+          )}
         </div>
 
 
@@ -302,14 +316,6 @@ function CourseViewer({ course, onVisit, onUpdateProgress, onUpdateLessons, onUp
           </ol>
         </div>
 
-        {course.url && (
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Course Preview</h2>
-            <a href={course.url} target="_blank" rel="noopener noreferrer" onClick={() => onVisit(course.id)}>
-              <UrlScreenshot key={course.url} url={course.url} />
-            </a>
-          </div>
-        )}
       </div>
     </main>
   )
