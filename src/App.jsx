@@ -102,6 +102,32 @@ function App() {
     )
   }
 
+  async function handleSaveToFile() {
+    const json = JSON.stringify(courses, null, 2)
+    if (window.showSaveFilePicker) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: 'courses.json',
+          types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
+        })
+        const writable = await handle.createWritable()
+        await writable.write(json)
+        await writable.close()
+      } catch (e) {
+        if (e.name !== 'AbortError') console.error(e)
+      }
+    } else {
+      // Fallback: trigger a download
+      const blob = new Blob([json], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'courses.json'
+      a.click()
+      URL.revokeObjectURL(url)
+    }
+  }
+
   function handleUpdateField(courseId, field, value) {
     setCourses((prev) =>
       prev.map((c) => c.id === courseId ? { ...c, [field]: value } : c)
@@ -137,6 +163,7 @@ function App() {
         selectedCourseId={selectedCourseId}
         onSelectCourse={setSelectedCourseId}
         onOpenModal={() => setIsModalOpen(true)}
+        onSaveToFile={handleSaveToFile}
       />
       <CourseViewer course={selectedCourse} onVisit={handleVisitCourse} onUpdateProgress={handleUpdateProgress} onUpdateLessons={handleUpdateLessons} onUpdateUrl={handleUpdateUrl} onToggleComplete={handleToggleComplete} onDeleteCourse={handleDeleteCourse} onUpdateField={handleUpdateField} />
       {isModalOpen && (

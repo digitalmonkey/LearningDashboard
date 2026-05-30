@@ -1,7 +1,7 @@
 import CourseListItem from '../CourseListItem/CourseListItem'
 import styles from './Sidebar.module.css'
 
-function Sidebar({ courses, selectedCourseId, onSelectCourse, onOpenModal }) {
+function Sidebar({ courses, selectedCourseId, onSelectCourse, onOpenModal, onSaveToFile }) {
   return (
     <nav className={styles.sidebar}>
       <div className={styles.header}>
@@ -23,6 +23,9 @@ function Sidebar({ courses, selectedCourseId, onSelectCourse, onOpenModal }) {
       <div className={styles.footer}>
         <button className={styles.addButton} onClick={onOpenModal}>
           + Add Course
+        </button>
+        <button className={styles.saveButton} onClick={onSaveToFile}>
+          Export Courses
         </button>
       </div>
     </nav>
