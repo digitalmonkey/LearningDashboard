@@ -93,3 +93,9 @@
   border-color: rgba(255, 255, 255, 0.3);
   color: #ffffff;
 }
+
+.savedAt {
+  font-size: 0.72rem;
+  color: #4b7a5a;
+  text-align: center;
+}

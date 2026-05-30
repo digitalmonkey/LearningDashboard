@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Sidebar from './components/Sidebar/Sidebar'
 import CourseViewer from './components/CourseViewer/CourseViewer'
 import AddCourseModal from './components/AddCourseModal/AddCourseModal'
@@ -44,6 +44,8 @@ function App() {
   const [courses, setCourses] = useState(loadFromLocalStorage)
   const [selectedCourseId, setSelectedCourseId] = useState(() => loadFromLocalStorage()[0]?.id ?? null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [savedAt, setSavedAt] = useState(null)
+  const fileHandleRef = useRef(null)
 
   const selectedCourse = courses.find((c) => c.id === selectedCourseId) ?? null
 
@@ -64,10 +66,16 @@ function App() {
     })
   }, [])
 
-  // On every change, persist to both localStorage and courses.json
+  // On every change, persist to localStorage, courses.json, and export file handle if set
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(courses))
-    saveToFile(courses)
+    const json = JSON.stringify(courses, null, 2)
+    saveToFile(courses).then(() => setSavedAt(new Date()))
+    if (fileHandleRef.current) {
+      fileHandleRef.current.createWritable()
+        .then((w) => w.write(json).then(() => w.close()))
+        .catch(() => {})
+    }
   }, [courses])
 
   function handleAddCourse(newCourse) {
@@ -110,14 +118,15 @@ function App() {
           suggestedName: 'courses.json',
           types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
         })
+        fileHandleRef.current = handle
         const writable = await handle.createWritable()
         await writable.write(json)
         await writable.close()
+        setSavedAt(new Date())
       } catch (e) {
         if (e.name !== 'AbortError') console.error(e)
       }
     } else {
-      // Fallback: trigger a download
       const blob = new Blob([json], { type: 'application/json' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -125,6 +134,7 @@ function App() {
       a.download = 'courses.json'
       a.click()
       URL.revokeObjectURL(url)
+      setSavedAt(new Date())
     }
   }
 
@@ -164,6 +174,7 @@ function App() {
         onSelectCourse={setSelectedCourseId}
         onOpenModal={() => setIsModalOpen(true)}
         onSaveToFile={handleSaveToFile}
+        savedAt={savedAt}
       />
       <CourseViewer course={selectedCourse} onVisit={handleVisitCourse} onUpdateProgress={handleUpdateProgress} onUpdateLessons={handleUpdateLessons} onUpdateUrl={handleUpdateUrl} onToggleComplete={handleToggleComplete} onDeleteCourse={handleDeleteCourse} onUpdateField={handleUpdateField} />
       {isModalOpen && (

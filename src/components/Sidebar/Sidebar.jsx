@@ -1,7 +1,7 @@
 import CourseListItem from '../CourseListItem/CourseListItem'
 import styles from './Sidebar.module.css'
 
-function Sidebar({ courses, selectedCourseId, onSelectCourse, onOpenModal, onSaveToFile }) {
+function Sidebar({ courses, selectedCourseId, onSelectCourse, onOpenModal, onSaveToFile, savedAt }) {
   return (
     <nav className={styles.sidebar}>
       <div className={styles.header}>
@@ -27,6 +27,11 @@ function Sidebar({ courses, selectedCourseId, onSelectCourse, onOpenModal, onSav
         <button className={styles.saveButton} onClick={onSaveToFile}>
           Export Courses
         </button>
+        {savedAt && (
+          <p className={styles.savedAt}>
+            Auto-saved {savedAt.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+          </p>
+        )}
       </div>
     </nav>
   )
